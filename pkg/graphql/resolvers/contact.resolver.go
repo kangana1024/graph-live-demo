@@ -2,9 +2,10 @@ package resolvers
 
 import (
 	//"fmt"
-	"time"
+
 	"graphql-api/internal/contact"
 	"graphql-api/pkg/data/models"
+	"time"
 
 	"github.com/graphql-go/graphql"
 )
@@ -43,11 +44,10 @@ func CreateContactResolve(params graphql.ResolveParams) (interface{}, error) {
 	input := params.Args["input"].(map[string]interface{})
 
 	contactInput := models.ContactModel{
-
 		Name:      input["name"].(string),
 		FirstName: input["first_name"].(string),
 		LastName:  input["last_name"].(string),
-		GenderId:  input["gender_id"].(int64),
+		GenderId:  input["gender_id"].(int),
 		Dob:       input["dob"].(time.Time),
 		Email:     input["email"].(string),
 		Phone:     input["phone"].(string),
@@ -64,7 +64,7 @@ func CreateContactResolve(params graphql.ResolveParams) (interface{}, error) {
 	if err != nil {
 		return nil, err
 	}
-	contactInput.ContactId = id
+	contactInput.ContactId = int(id)
 
 	return contactInput, nil
 }
