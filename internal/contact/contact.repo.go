@@ -63,3 +63,15 @@ func (cr *ContactRepo) GetContactsBySearchText(searchText string, limit, offset 
 
 	return contacts, nil
 }
+
+
+// Insert Contact inserts a new contact into the database
+func (cr *ContactRepo) InsertContact(contact *models.ContactModel) (int64, error) {
+	// Execute insert query to insert a new contact into the database
+	result, err := cr.DB.Insert("INSERT INTO contact (name,first_name,last_name,gender_id,dob,email,phone,address,photo_path,created_at,created_by) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
+		 contact.Name, contact.FirstName, contact.LastName, contact.GenderId, contact.Dob, contact.Email, contact.Phone, contact.Address, contact.PhotoPath, contact.CreatedAt, contact.CreatedBy)
+	if err != nil {
+		return 0, err
+	}
+	return result.LastInsertId()
+}

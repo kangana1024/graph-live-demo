@@ -21,3 +21,19 @@ var RootQuery = graphql.NewObject(
 		},
 	},
 )
+
+// RootMutation represents the root GraphQL query.
+var RootMutation = graphql.NewObject(
+	graphql.ObjectConfig{
+		Name: "RootMutation",
+		Fields: graphql.Fields{
+			"contactMutations": &graphql.Field{
+				Type: ContactMutationsType,
+				Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+					return &ContactMutations{}, nil
+				},
+			},
+			// Add other queries as needed
+		},
+	},
+)

@@ -2,13 +2,13 @@ package main
 
 import (
 	"fmt"
+	"graphql-api/config"
 	"net/http"
+
 	"github.com/graphql-go/graphql"
 	"github.com/graphql-go/handler"
-	"graphql-api/config"
-	
+
 	gql "graphql-api/pkg/graphql"
-	
 )
 
 var cfg *config.Config
@@ -19,10 +19,10 @@ func init() {
 }
 
 func main() {
-	
 
 	schema, err := graphql.NewSchema(graphql.SchemaConfig{
-		Query:        gql.RootQuery,
+		Query:    gql.RootQuery,
+		Mutation: gql.RootMutation,
 	})
 	if err != nil {
 		panic(err)
@@ -42,11 +42,8 @@ func main() {
 		Addr: fmt.Sprintf(":%v", cfg.GraphQLPort),
 	}
 
-
-		// Start the HTTP server
-		fmt.Printf("Server is running at http://localhost:%v/graphql\n", cfg.GraphQLPort)
-		server.ListenAndServe()
-
+	// Start the HTTP server
+	fmt.Printf("Server is running at http://localhost:%v/graphql\n", cfg.GraphQLPort)
+	server.ListenAndServe()
 
 }
-

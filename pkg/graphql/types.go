@@ -44,3 +44,20 @@ var ContactQueriesType = graphql.NewObject(graphql.ObjectConfig{
 
 	},
 })
+
+type ContactMutations struct {
+	CreateContact  func(map[string]interface{}) (*models.ContactModel, error)   `json:"createContact"`
+  
+}
+
+// Define the ContactMutations type
+var ContactMutationsType = graphql.NewObject(graphql.ObjectConfig{
+	Name: "ContactMutations",
+	Fields: graphql.Fields{
+		"createContact": &graphql.Field{
+			Type:    ContactGraphQLType,
+			Args:    CreateContactArgument,
+			Resolve: resolvers.CreateContactResolve,
+		},
+	},
+})

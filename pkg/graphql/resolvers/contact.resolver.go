@@ -2,7 +2,9 @@ package resolvers
 
 import (
 	//"fmt"
+	"time"
 	"graphql-api/internal/contact"
+	"graphql-api/pkg/data/models"
 
 	"github.com/graphql-go/graphql"
 )
@@ -34,4 +36,35 @@ func GetContactResolve(params graphql.ResolveParams) (interface{}, error) {
 	}
 
 	return contacts, nil
+}
+
+func CreateContactResolve(params graphql.ResolveParams) (interface{}, error) {
+	// Map input fields to Contact struct
+	input := params.Args["input"].(map[string]interface{})
+
+	contactInput := models.ContactModel{
+
+		Name:      input["name"].(string),
+		FirstName: input["first_name"].(string),
+		LastName:  input["last_name"].(string),
+		GenderId:  input["gender_id"].(int64),
+		Dob:       input["dob"].(time.Time),
+		Email:     input["email"].(string),
+		Phone:     input["phone"].(string),
+		Address:   input["address"].(string),
+		PhotoPath: input["photo_path"].(string),
+		CreatedBy: "test-api",
+		CreatedAt: time.Now(),
+	}
+
+	contactRepo := contact.NewContactRepo()
+
+	// Insert Contact to the database
+	id, err := contactRepo.InsertContact(&contactInput)
+	if err != nil {
+		return nil, err
+	}
+	contactInput.ContactId = id
+
+	return contactInput, nil
 }
